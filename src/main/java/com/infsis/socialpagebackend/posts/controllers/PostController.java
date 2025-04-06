@@ -27,7 +27,7 @@ public class PostController {
         return postService.getAllPost();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('GESTIONAR_PUBLICACIONES')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PostDTO create(@Valid @RequestBody PostDTO postDTO) {

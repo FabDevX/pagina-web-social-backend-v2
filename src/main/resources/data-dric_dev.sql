@@ -253,4 +253,21 @@ values(1, 110, 10, NOW()),
 -- Actualizar la secuencia para la tabla followers
 SELECT setval('followers_id_seq', (SELECT MAX(id) FROM followers));
 
+-- Añadir permisos a los roles
+INSERT INTO permissions (name_permission) VALUES
+('GESTIONAR_ROLES'), ('GESTIONAR_USUARIOS'), ('GESTIONAR_PUBLICACIONES'),
+('GESTIONAR_COMENTARIOS'), ('ELIMINAR_PUBLICACIONES'), ('ELIMINAR_COMENTARIOS'),
+('CREAR_PUBLICACION'), ('EDITAR_PROPIA_PUBLICACION'),
+('ELIMINAR_PROPIA_PUBLICACION'), ('COMENTAR_PUBLICACIONES'),
+('EDITAR_PROPIO_COMENTARIO'), ('ELIMINAR_PROPIO_COMENTARIO');
 
+-- Asignar permisos al rol de STUDENT
+INSERT INTO rol_permissions (role_id, permission_id)
+SELECT r.id_role, p.id_permission FROM role r, permissions p
+WHERE r.name = 'STUDENT'
+AND p.name_permission IN ('CREAR_PUBLICACION', 'EDITAR_PROPIA_PUBLICACION', 'ELIMINAR_PROPIA_PUBLICACION',
+                 'COMENTAR_PUBLICACIONES', 'EDITAR_PROPIO_COMENTARIO', 'ELIMINAR_PROPIO_COMENTARIO');
+
+-- Asignar permisos a ADMIN
+INSERT INTO rol_permissions (role_id, permission_id)
+SELECT r.id_role, p.id_permission FROM role r, permissions p WHERE r.name = 'ADMIN';
