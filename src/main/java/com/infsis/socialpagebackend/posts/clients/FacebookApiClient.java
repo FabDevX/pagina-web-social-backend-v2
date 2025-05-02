@@ -50,11 +50,9 @@ public class FacebookApiClient {
         params.add("access_token", graphApiPageAccessToken);
         params.add("message", postDTO.getContent().getText());
 
-        List<String> savedPhotos = postImages(postDTO.getContent().getMedia());
-
         int i = 0;
-        for (String mediaFbID : savedPhotos) {
-            params.add("attached_media[" + i +  "]", "{'media_fbid':'" + mediaFbID + "'}");
+        for (MediaDTO mediaFbID : postDTO.getContent().getMedia()) {
+            params.add("attached_media[" + i +  "]", "{'media_fbid':'" + mediaFbID.getFb_media_id() + "'}");
             i++;
         }
 
