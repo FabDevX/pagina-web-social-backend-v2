@@ -53,6 +53,8 @@ public class SectionService {
     @Autowired
     private UserRepository userRepository;
 
+
+
     public SectionDTO getSection(String sectionUuid) {
         Section section = sectionRepository.findOneByUuid(sectionUuid);
 
@@ -71,6 +73,13 @@ public class SectionService {
                 .filter(section -> !section.isDeleted())
                 .map(section -> sectionMapper.toDTO(section))
                 .collect(Collectors.toList());
+    }
+
+    public SectionDTO getSectionByName(String name) {
+        return sectionRepository
+                .findByName(name)
+                .map(section -> sectionMapper.toDTO(section))
+                .orElseThrow(() -> new NotFoundException("Section not found with name: ", name));
     }
 
     public SectionDTO saveSection(SectionDTO sectionDTO) {
