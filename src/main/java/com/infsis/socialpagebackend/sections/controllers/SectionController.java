@@ -28,6 +28,11 @@ public class SectionController {
         return sectionService.getAllSections();
     }
 
+    @GetMapping(params = "name")  // This will match /api/v1/sections?name={name}
+    public SectionDTO getByName(@RequestParam String name) {
+        return sectionService.getSectionByName(name);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public SectionDTO create(@Valid @RequestBody SectionDTO sectionDTO) {
