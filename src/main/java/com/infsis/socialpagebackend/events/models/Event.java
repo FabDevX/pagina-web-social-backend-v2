@@ -86,6 +86,9 @@ public class Event {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EventMedia> media = new ArrayList<>();
 
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EventInvitation> invitations = new ArrayList<>();
+
     @CreatedDate
     @Column(updatable = false)
     private Date createdDate;
