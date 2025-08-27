@@ -48,9 +48,8 @@ public class Event {
     @JoinColumn(name = "category_id", referencedColumnName = "uuid", nullable = false)
     private EventCategory category;
 
-    @ManyToOne
-    @JoinColumn(name = "location_id", referencedColumnName = "uuid")
-    private EventLocation location;
+    @Column(length = 500)
+    private String location; // Simple text field for location
 
     @Column(nullable = false, length = 200)
     private String title;
@@ -86,9 +85,6 @@ public class Event {
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EventMedia> media = new ArrayList<>();
-
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<EventComment> comments = new ArrayList<>();
 
     @CreatedDate
     @Column(updatable = false)
