@@ -35,18 +35,19 @@ public class Event {
 
     @Column(updatable = false, nullable = false, unique = true, length = 36)
     private String uuid;
-
+/*
     @ManyToOne
     @JoinColumn(name = "institution_id", referencedColumnName = "uuid", nullable = false)
     private Institution institution;
-
+**/
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "uuid", nullable = false)
     private Users creator;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "uuid", nullable = false)
-    private EventCategory category;
+  //  @ManyToOne
+    //@JoinColumn(name = "category_id", referencedColumnName = "uuid", nullable = false)
+    //private EventCategory category;
+
 
     @Column(length = 500)
     private String location; // Simple text field for location

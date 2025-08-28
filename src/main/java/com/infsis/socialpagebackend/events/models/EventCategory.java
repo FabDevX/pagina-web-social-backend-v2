@@ -44,8 +44,8 @@ public class EventCategory {
     @Column(nullable = false)
     private Boolean isActive;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Event> events = new ArrayList<>();
+   // @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    //private List<Event> events = new ArrayList<>();
 
     @CreatedDate
     @Column(updatable = false)
