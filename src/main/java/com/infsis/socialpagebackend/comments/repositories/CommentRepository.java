@@ -13,4 +13,8 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     @Query("SELECT pr FROM Comment pr WHERE pr.post.uuid = ?1")
     List<Comment> findByPostId(String postUuid);
+
+    @Query("SELECT COUNT(*) FROM Comment WHERE state=?1")
+    long countByModerated(String state);
+
 }

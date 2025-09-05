@@ -5,6 +5,7 @@ import com.infsis.socialpagebackend.comments.mappers.CommentMapper;
 import com.infsis.socialpagebackend.enums.*;
 import com.infsis.socialpagebackend.exceptions.NotFoundException;
 import com.infsis.socialpagebackend.comments.models.Comment;
+import com.infsis.socialpagebackend.institutions.models.Institution;
 import com.infsis.socialpagebackend.posts.models.Post;
 import com.infsis.socialpagebackend.authentication.models.Users;
 import com.infsis.socialpagebackend.posts.repositories.CommentConfigRepository;
@@ -132,11 +133,16 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
+    public long countModeratedComments() {
+        return commentRepository.countByModerated(CommentState.PENDING_APPROVAL.name());
+    }
+
     public CommentDTO approvePendingModeratedComment(CommentDTO commentDTO) {
 
         Comment currentComment = commentRepository.findByUuid(commentDTO.getUuid());
 
         currentComment.setState(CommentState.APPROVED.name());
+        currentComment.setModerated(false);
 
         commentRepository.save(currentComment);
 

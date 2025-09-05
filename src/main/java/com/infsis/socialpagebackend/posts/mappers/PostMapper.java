@@ -10,7 +10,6 @@ import com.infsis.socialpagebackend.posts.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 
 @Component
 public class PostMapper {
@@ -22,11 +21,10 @@ public class PostMapper {
         PostDTO postDTO = new PostDTO();
         postDTO.setUuid(post.getUuid());
         postDTO.setInstitution_id(post.getInstitution().getUuid());
-        postDTO.setUser_id(post.getUser().getUuid());
+        postDTO.setPost_type(post.getPost_type());
+        postDTO.setUser_id(post.getUsers().getUuid());
         postDTO.setComment_config_id(post.getComment_conf().getUuid());
         postDTO.setDate(post.getPost_date());
-        postDTO.setContent(contentMapper.toDTO(post.getContent()));
-  
 
         return postDTO;
     }
@@ -35,7 +33,8 @@ public class PostMapper {
         PostDTO postDTO = new PostDTO();
         postDTO.setUuid(post.getUuid());
         postDTO.setInstitution_id(post.getInstitution().getUuid());
-        postDTO.setUser_id(post.getUser().getUuid());
+        postDTO.setPost_type(post.getPost_type());
+        postDTO.setUser_id(post.getUsers().getUuid());
         postDTO.setComment_config_id(post.getComment_conf().getUuid());
         postDTO.setDate(post.getPost_date());
         postDTO.setContent(contentMapper.toDTO(post.getContent()));
@@ -51,7 +50,8 @@ public class PostMapper {
         Post post = new Post();
 
         post.setInstitution(institution);
-        post.setUser(user);
+        post.setUsers(user);
+        post.setPost_type(postDTO.getPost_type());
         post.setComment_conf(commentConfig);
         post.setPost_date(postDTO.getDate());
         post.setContent(content);

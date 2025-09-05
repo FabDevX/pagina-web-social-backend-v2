@@ -9,6 +9,7 @@ import com.infsis.socialpagebackend.enums.CommentState;
 import com.infsis.socialpagebackend.exceptions.NotFoundException;
 import com.infsis.socialpagebackend.institutions.models.Institution;
 import com.infsis.socialpagebackend.institutions.repositories.InstitutionRepository;
+import com.infsis.socialpagebackend.posts.clients.FacebookApiClient;
 import com.infsis.socialpagebackend.posts.dtos.*;
 import com.infsis.socialpagebackend.posts.mappers.MediaMapper;
 import com.infsis.socialpagebackend.posts.mappers.PostMapper;
@@ -25,7 +26,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import java.util.ArrayList;
@@ -82,6 +82,9 @@ public class PostService {
     @Autowired
     private GroupRepository groupRepository;
 
+    @Autowired
+    private FacebookApiClient facebookApiClient;
+
     public PostDTO getPost(String postUuid) {
         Post post = postRepository.findOneByUuid(postUuid);
 
@@ -110,6 +113,15 @@ public class PostService {
                 .findAll()
                 .stream()
                 .filter(post -> isFromGroup(groupUuid, post) && !post.isDeleted())
+                .map(post -> postMapper.toDTO(post, getPostReactionCounterDTO(post), getCommentCounter(post.getUuid())))
+                .collect(Collectors.toList());
+    }
+
+    public List<PostDTO> getPostsByType(String postType) {
+        return postRepository
+                .findAll()
+                .stream()
+                .filter(post -> post.getPost_type().equals(postType))
                 .map(post -> postMapper.toDTO(post, getPostReactionCounterDTO(post), getCommentCounter(post.getUuid())))
                 .collect(Collectors.toList());
     }
@@ -147,6 +159,12 @@ public class PostService {
             resDTO = postMapper.toDTO(post);
 
         }
+
+        // Publish in Facebook
+        if(postDTO.getFb_post_enable()) {
+            facebookApiClient.postPublication(postDTO);
+        }
+
         return resDTO;
     }
 
@@ -418,8 +436,6 @@ public class PostService {
         return mediaItems;
     }
 
-
-
     public List<PostDTO> getPagedPosts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("post_date").descending());
         Page<Post> posts = postRepository.findAllPaged(pageable);
@@ -428,6 +444,5 @@ public class PostService {
                     .map(post -> postMapper.toDTO(post, getPostReactionCounterDTO(post), getCommentCounter(post.getUuid())))
                     .collect(Collectors.toList());
     }
-    
     
 }

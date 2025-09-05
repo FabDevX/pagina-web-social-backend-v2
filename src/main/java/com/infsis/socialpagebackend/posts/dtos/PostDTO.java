@@ -12,7 +12,7 @@ import java.util.Date;
 @Data
 public class PostDTO {
 
-    private String uuid; // Identificador único para la publicación
+    private String uuid;
 
     @NotBlank
     @Size(min = 36, max = 40)
@@ -29,11 +29,19 @@ public class PostDTO {
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     private Date date;
 
+    @NotBlank
+    @Size(min = 3, max = 40)
+    private String post_type;
+
     @NotNull
     private ContentDTO content;
 
     private ReactionCounterDTO reactions;
 
     private CommentCounterDTO commentCounter;
+
+    private Boolean is_fb_posted;
+
+    private Boolean fb_post_enable;
 
 }
