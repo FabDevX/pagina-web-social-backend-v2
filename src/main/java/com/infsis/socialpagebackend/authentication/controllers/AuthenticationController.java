@@ -163,16 +163,11 @@ public class AuthenticationController {
     @PostMapping("/auth/logout")
     public ResponseEntity<Map<String, Object>> logout(HttpServletRequest request) {
         String refreshTokenHeader = request.getHeader("Authorization");
+        authenticationService.logout(refreshTokenHeader);
+        SecurityContextHolder.clearContext();
         Map<String, Object> response = new HashMap<>();
-        try {
-            authenticationService.logout(refreshTokenHeader);
-            SecurityContextHolder.clearContext();
-            response.put("message", CLOSED_USER_SESSION_MESSAGE);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (IllegalArgumentException ex) {
-            response.put("error", ex.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
+        response.put("message", CLOSED_USER_SESSION_MESSAGE);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/auth/refresh")
