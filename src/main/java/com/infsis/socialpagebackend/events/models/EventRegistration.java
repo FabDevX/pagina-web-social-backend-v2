@@ -48,13 +48,6 @@ public class EventRegistration {
     @Column(length = 20)
     private String status; // REGISTERED, CONFIRMED, CANCELLED, ATTENDED, NO_SHOW
 
-    @Column(length = 500)
-    private String notes; // Special requirements or notes
-
-    @Column
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
-    private Date checkInDate; // When user actually attended
-
     @Column(length = 100)
     private String confirmationCode; // Unique code for event access
 

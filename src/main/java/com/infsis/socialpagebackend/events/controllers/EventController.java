@@ -1,6 +1,5 @@
 package com.infsis.socialpagebackend.events.controllers;
 
-import com.infsis.socialpagebackend.events.models.Event;
 import com.infsis.socialpagebackend.events.models.EventRegistration;
 import com.infsis.socialpagebackend.events.models.EventMedia;
 import com.infsis.socialpagebackend.events.models.EventInvitation;
@@ -10,6 +9,8 @@ import com.infsis.socialpagebackend.events.services.EventMediaService;
 import com.infsis.socialpagebackend.events.services.EventInvitationService;
 import com.infsis.socialpagebackend.events.dtos.EventDTO;
 import com.infsis.socialpagebackend.events.dtos.EventDetailDTO;
+import com.infsis.socialpagebackend.events.dtos.EventRegistrationResponseDTO;
+import com.infsis.socialpagebackend.events.mappers.EventRegistrationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,8 @@ public class EventController {
     private EventMediaService eventMediaService;
     @Autowired
     private EventInvitationService eventInvitationService;
+    @Autowired
+    private EventRegistrationMapper eventRegistrationMapper;
 
     // GET /events: Listar todos los eventos (con paginación y filtros opcionales)
     @GetMapping
@@ -70,11 +73,9 @@ public class EventController {
 
     // POST /events/{uuid}/registrations: Registrar un usuario a un evento
     @PostMapping("/{uuid}/registrations")
-    public ResponseEntity<EventRegistration> registerUserToEvent(@PathVariable String uuid, @RequestBody EventRegistration registration) {
-        // Asignar el evento por UUID (simplificado, requiere lógica real)
-     //   Event event = eventService.getEventByUuid(uuid);
-       // registration.setEvent(event);
-        return ResponseEntity.ok(eventRegistrationService.createRegistration(registration));
+    public ResponseEntity<EventRegistrationResponseDTO> registerUserToEvent(@PathVariable String uuid) {
+        EventRegistrationResponseDTO response = eventRegistrationService.registerStudentToEvent(uuid);
+        return ResponseEntity.status(201).body(response);
     }
 
     // GET /events/{uuid}/media: Listar archivos multimedia asociados
