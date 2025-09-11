@@ -6,12 +6,15 @@ import com.infsis.socialpagebackend.events.repositories.EventRegistrationReposit
 import com.infsis.socialpagebackend.events.repositories.EventRepository;
 import com.infsis.socialpagebackend.events.mappers.EventRegistrationMapper;
 import com.infsis.socialpagebackend.events.dtos.EventRegistrationResponseDTO;
+import com.infsis.socialpagebackend.events.dtos.EventRegistrationListDTO;
 import com.infsis.socialpagebackend.authentication.repositories.UserRepository;
 import com.infsis.socialpagebackend.authentication.models.Users;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,8 +33,13 @@ public class EventRegistrationService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<EventRegistration> getRegistrationsByEventUuid(String eventUuid) {
-        return registrationRepository.findByEvent_Uuid(eventUuid);
+    public List<EventRegistrationListDTO> getRegistrationsByEventUuid(String eventUuid) {
+        Optional<Event> eventOpt = eventRepository.findByUuid(eventUuid);
+        if (eventOpt.isEmpty()) {
+            throw new EntityNotFoundException("Evento no encontrado: " + eventUuid);
+        }
+        List<EventRegistration> registrations = registrationRepository.findByEvent_Uuid(eventUuid);
+        return eventRegistrationMapper.toListDTO(registrations);
     }
 
     public EventRegistration createRegistration(EventRegistration registration) {

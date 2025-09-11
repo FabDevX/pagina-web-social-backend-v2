@@ -10,6 +10,7 @@ import com.infsis.socialpagebackend.events.services.EventInvitationService;
 import com.infsis.socialpagebackend.events.dtos.EventDTO;
 import com.infsis.socialpagebackend.events.dtos.EventDetailDTO;
 import com.infsis.socialpagebackend.events.dtos.EventRegistrationResponseDTO;
+import com.infsis.socialpagebackend.events.dtos.EventRegistrationListDTO;
 import com.infsis.socialpagebackend.events.mappers.EventRegistrationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -67,7 +68,7 @@ public class EventController {
 
     // GET /events/{uuid}/registrations: Listar registros de un evento
     @GetMapping("/{uuid}/registrations")
-    public ResponseEntity<List<EventRegistration>> getEventRegistrations(@PathVariable String uuid) {
+    public ResponseEntity<List<EventRegistrationListDTO>> getEventRegistrations(@PathVariable String uuid) {
         return ResponseEntity.ok(eventRegistrationService.getRegistrationsByEventUuid(uuid));
     }
 
