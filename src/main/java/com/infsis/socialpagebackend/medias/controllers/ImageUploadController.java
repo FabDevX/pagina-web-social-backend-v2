@@ -76,10 +76,11 @@ public class ImageUploadController {
 
     @PostMapping("/events-cover")
     @ResponseStatus(HttpStatus.CREATED)
-    public List<ImageFileDTO> uploadEventCoverPhoto(@RequestParam("image") @ValidImageFile MultipartFile image) throws IOException {
+    public ImageFileDTO uploadEventCoverPhoto(@RequestParam("image") @ValidImageFile MultipartFile image) throws IOException {
         List<MultipartFile> eventCoverImage = new ArrayList<>();
         eventCoverImage.add(image);
-        return imageStorageService.storeImages(eventCoverImage, EVENTS_COVER_DIR, IMAGES_EVENTS_COVER_PATH);
+        List<ImageFileDTO> result = imageStorageService.storeImages(eventCoverImage, EVENTS_COVER_DIR, IMAGES_EVENTS_COVER_PATH);
+        return result.get(0); // Devolver solo el primer (y único) elemento
     }
 
     @GetMapping(value = "/posts/{filename}")
