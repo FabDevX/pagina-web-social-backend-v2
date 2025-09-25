@@ -27,10 +27,12 @@ public class ImageUploadController {
     private static final String INST_PROFILE_PHOTO_DIR = System.getProperty("user.dir") + "/storage/institution/profile/photos/";
     private static final String INST_COVER_DIR = System.getProperty("user.dir") + "/storage/institution/cover/photos/";
     private static final String USER_PROFILE_PHOTO_DIR = System.getProperty("user.dir") + "/storage/users/photos/";
+    private static final String EVENTS_COVER_DIR = System.getProperty("user.dir") + "/storage/institution/cover/Events/";
     private static final String IMAGES_POSTS_PATH = "/api/v1/images/posts/";
     private static final String IMAGES_INSTITUTION_PROFILE_PATH = "/api/v1/images/inst-profile/";
     private static final String IMAGES_INSTITUTION_COVER_PATH = "/api/v1/images/inst-cover/";
     private static final String IMAGES_USER_PATH = "/api/v1/images/users/";
+    private static final String IMAGES_EVENTS_COVER_PATH = "/api/v1/images/events-cover/";
 
     @Autowired
     private ImageStorageService imageStorageService;
@@ -72,6 +74,14 @@ public class ImageUploadController {
         return imageStorageService.storeImages(userImage, USER_PROFILE_PHOTO_DIR, IMAGES_USER_PATH);
     }
 
+    @PostMapping("/events-cover")
+    @ResponseStatus(HttpStatus.CREATED)
+    public List<ImageFileDTO> uploadEventCoverPhoto(@RequestParam("image") @ValidImageFile MultipartFile image) throws IOException {
+        List<MultipartFile> eventCoverImage = new ArrayList<>();
+        eventCoverImage.add(image);
+        return imageStorageService.storeImages(eventCoverImage, EVENTS_COVER_DIR, IMAGES_EVENTS_COVER_PATH);
+    }
+
     @GetMapping(value = "/posts/{filename}")
     public ResponseEntity<Resource> getPostImage(@PathVariable String filename) {
         return imageStorageService.getResourceImage(filename, POSTS_PHOTOS_DIRECTORY);
@@ -90,6 +100,11 @@ public class ImageUploadController {
     @GetMapping(value = "/users/{filename}")
     public ResponseEntity<Resource> getUserImage(@PathVariable String filename) {
         return imageStorageService.getResourceImage(filename, USER_PROFILE_PHOTO_DIR);
+    }
+
+    @GetMapping(value = "/events-cover/{filename}")
+    public ResponseEntity<Resource> getEventCoverImage(@PathVariable String filename) {
+        return imageStorageService.getResourceImage(filename, EVENTS_COVER_DIR);
     }
 
     @PreAuthorize("hasAuthority('DELETE_POST_IMAGE')")
